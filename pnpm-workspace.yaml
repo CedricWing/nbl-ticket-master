@@ -1,0 +1,8 @@
+packages:
+  - 'apps/*'
+
+# Silences pnpm's "ignored build scripts" warning for these two (pulled in by Next.js) —
+# neither needs its install script for this project.
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver

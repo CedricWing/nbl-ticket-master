@@ -1,0 +1,29 @@
+{
+  "name": "nbl-ticket-master",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
+  "packageManager": "pnpm@10.33.3",
+  "scripts": {
+    "dev": "./.local.sh",
+    "build": "pnpm --recursive run build",
+    "test": "pnpm --filter ticketing-api test",
+    "test:integration": "pnpm --filter ticketing-api test:integration",
+    "db:migrate": "pnpm --filter ticketing-api db:migrate",
+    "seed": "pnpm --filter ticketing-api seed",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "typecheck": "pnpm --recursive run --if-present typecheck"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.11",
+    "prettier": "^3",
+    "typescript": "^5",
+    "typescript-eslint": "^8"
+  }
+}

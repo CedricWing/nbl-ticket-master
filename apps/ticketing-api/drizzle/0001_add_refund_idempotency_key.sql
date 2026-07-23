@@ -1,0 +1,1 @@
+ALTER TABLE "tickets" ADD COLUMN "refund_idempotency_key" text;

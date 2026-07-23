@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nbl_ticket_master
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ticketing-api:
+    build:
+      context: .
+      dockerfile: apps/ticketing-api/Dockerfile
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/nbl_ticket_master
+      JWT_SECRET: dev-only-secret-change-me
+      PORT: 3000
+      CORS_ORIGIN: http://localhost:3001
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ticketing-web:
+    build:
+      context: .
+      dockerfile: apps/ticketing-web/Dockerfile
+      args:
+        # Baked into the browser bundle — must be host-reachable, not the internal service name.
+        NEXT_PUBLIC_API_URL: http://localhost:3000
+    environment:
+      # Used only by Server Components running inside this container (e.g. the games list on
+      # `/`) — the Docker network hostname, unlike NEXT_PUBLIC_API_URL above which the browser uses.
+      API_INTERNAL_URL: http://ticketing-api:3000
+    ports:
+      - '3001:3001'
+    depends_on:
+      - ticketing-api
+
+volumes:
+  postgres_data:

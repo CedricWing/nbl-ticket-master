@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+
+.env
+.env.*
+!.env.example
+
+**/drizzle/meta/
+*.log
+*.tsbuildinfo
+.DS_Store
+coverage/
+
+.claude/
